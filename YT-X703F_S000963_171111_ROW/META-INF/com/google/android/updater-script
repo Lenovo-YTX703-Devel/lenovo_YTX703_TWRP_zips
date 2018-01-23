@@ -2,37 +2,24 @@
 # Updater script for S000963_171111_ROW firmware
 # Lenovo YT-X703F (Wi-Fi only)
 ###############################################################################
-getprop("ro.product.device") == "YT-X703F" || \
-	abort("E3004: This package is for \"YT-X703F\" devices; this is a \"" + \
-	getprop("ro.product.device") + "\".");
+getprop("ro.product.device") == "yt_x703f" || abort("E3004: This package is for \"YT-X703F\" devices; this is a \"" + getprop("ro.product.device") + "\".");
 
 ui_print("Flashing stock firmware S000963_171111_ROW onto your YT-X703F.");
 set_progress(0.01);
 ui_print(" ");
 
 # Perform the SHA1 checks
-sha1_check("adspso.bin",        7499a82db2f4d0c144bce15e7f610ea4e90fce6a) || \
-	abort("E3005: File adspso.bin does not have SHA1 7499a82db2f4d0c144bce15e7f610ea4e90fce6a");
-sha1_check("cmnlib64.mbn",      e4020489a7e3c37e53a2622f973173128344efe9) || \
-	abort("E3005: File cmnlib64.mbn does not have SHA1 e4020489a7e3c37e53a2622f973173128344efe9");
-sha1_check("cmnlib.mbn",        e77e9018e9a2df8d2094ba19bcb732b907f4610d) || \
-	abort("E3005: File cmnlib.mbn does not have SHA1 e77e9018e9a2df8d2094ba19bcb732b907f4610d");
-sha1_check("countrycode.img",   a612a323b387907ea92a015e26c3be72e27ba0b6) || \
-	abort("E3005: File countrycode.img does not have SHA1 a612a323b387907ea92a015e26c3be72e27ba0b6");
-sha1_check("devcfg.mbn",        ae29538a756388eba9ef4d5ee69ebcae84af91f9) || \
-	abort("E3005: File devcfg.mbn does not have SHA1 ae29538a756388eba9ef4d5ee69ebcae84af91f9");
-sha1_check("emmc_appsboot.mbn", e1daf62e9b1083a17ff689677a2ea30f84af37a9) || \
-	abort("E3005: File emmc_appsboot.mbn does not have SHA1 e1daf62e9b1083a17ff689677a2ea30f84af37a9");
-sha1_check("keymaster.mbn",     ddd9c352da5d85775ead6f895e6426ce59718580) || \
-	abort("E3005: File keymaster.mbn does not have SHA1 ddd9c352da5d85775ead6f895e6426ce59718580");
-sha1_check("NON-HLOS.bin",      156469c4001aef7c97b9c960bbb0b5d06cafdcea) || \
-	abort("E3005: File NON-HLOS.bin does not have SHA1 156469c4001aef7c97b9c960bbb0b5d06cafdcea");
-sha1_check("rpm.mbn",           2d9b6230bce7508dd59aeae6a29b3e4a2a38cd1b) || \
-	abort("E3005: File rpm.mbn does not have SHA1 2d9b6230bce7508dd59aeae6a29b3e4a2a38cd1b");
-sha1_check("sbl1.mbn",          ef6239cff8d247f4c5b23908a27c6dc8c7accccb) || \
-	abort("E3005: File sbl1.mbn does not have SHA1 ef6239cff8d247f4c5b23908a27c6dc8c7accccb");
-sha1_check("tz.mbn",            23528d788bca0d4b4be807d21695caa77d6c612c) || \
-	abort("E3005: File tz.mbn does not have SHA1 23528d788bca0d4b4be807d21695caa77d6c612c");
+sha1_check("adspso.bin",        7499a82db2f4d0c144bce15e7f610ea4e90fce6a) || abort("E3005: File adspso.bin does not have SHA1 7499a82db2f4d0c144bce15e7f610ea4e90fce6a");
+sha1_check("cmnlib64.mbn",      e4020489a7e3c37e53a2622f973173128344efe9) || abort("E3005: File cmnlib64.mbn does not have SHA1 e4020489a7e3c37e53a2622f973173128344efe9");
+sha1_check("cmnlib.mbn",        e77e9018e9a2df8d2094ba19bcb732b907f4610d) || abort("E3005: File cmnlib.mbn does not have SHA1 e77e9018e9a2df8d2094ba19bcb732b907f4610d");
+sha1_check("countrycode.img",   a612a323b387907ea92a015e26c3be72e27ba0b6) || abort("E3005: File countrycode.img does not have SHA1 a612a323b387907ea92a015e26c3be72e27ba0b6");
+sha1_check("devcfg.mbn",        ae29538a756388eba9ef4d5ee69ebcae84af91f9) || abort("E3005: File devcfg.mbn does not have SHA1 ae29538a756388eba9ef4d5ee69ebcae84af91f9");
+sha1_check("emmc_appsboot.mbn", e1daf62e9b1083a17ff689677a2ea30f84af37a9) || abort("E3005: File emmc_appsboot.mbn does not have SHA1 e1daf62e9b1083a17ff689677a2ea30f84af37a9");
+sha1_check("keymaster.mbn",     ddd9c352da5d85775ead6f895e6426ce59718580) || abort("E3005: File keymaster.mbn does not have SHA1 ddd9c352da5d85775ead6f895e6426ce59718580");
+sha1_check("NON-HLOS.bin",      156469c4001aef7c97b9c960bbb0b5d06cafdcea) || abort("E3005: File NON-HLOS.bin does not have SHA1 156469c4001aef7c97b9c960bbb0b5d06cafdcea");
+sha1_check("rpm.mbn",           2d9b6230bce7508dd59aeae6a29b3e4a2a38cd1b) || abort("E3005: File rpm.mbn does not have SHA1 2d9b6230bce7508dd59aeae6a29b3e4a2a38cd1b");
+sha1_check("sbl1.mbn",          ef6239cff8d247f4c5b23908a27c6dc8c7accccb) || abort("E3005: File sbl1.mbn does not have SHA1 ef6239cff8d247f4c5b23908a27c6dc8c7accccb");
+sha1_check("tz.mbn",            23528d788bca0d4b4be807d21695caa77d6c612c) || abort("E3005: File tz.mbn does not have SHA1 23528d788bca0d4b4be807d21695caa77d6c612c");
 
 set_progress(0.1);
 
