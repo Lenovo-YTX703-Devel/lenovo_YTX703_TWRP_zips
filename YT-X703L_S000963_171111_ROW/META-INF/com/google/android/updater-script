@@ -11,26 +11,16 @@ set_progress(0.01);
 ui_print(" ");
 
 # Perform the SHA1 checks
-sha1_check("adspso.bin",        8b1a57f7fabd18c8f6276f59c8b4d8cabda2e445) || \
-	abort("E3005: File adspso.bin does not have SHA1 8b1a57f7fabd18c8f6276f59c8b4d8cabda2e445");
-sha1_check("cmnlib64.mbn",      77f74c57b20be1a123a160ef3e0f33d752ca3fee) || \
-	abort("E3005: File cmnlib64.mbn does not have SHA1 77f74c57b20be1a123a160ef3e0f33d752ca3fee");
-sha1_check("cmnlib.mbn",        edf0aeb981affc8025ff653ab9620071b4fbcf05) || \
-	abort("E3005: File cmnlib.mbn does not have SHA1 edf0aeb981affc8025ff653ab9620071b4fbcf05");
-sha1_check("devcfg.mbn",        49276f059b7229976fd9152c9322772429d4eb00) || \
-	abort("E3005: File devcfg.mbn does not have SHA1 49276f059b7229976fd9152c9322772429d4eb00");
-sha1_check("emmc_appsboot.mbn", 9e45e787a4b42613454a2de1460c392c6a3a0511) || \
-	abort("E3005: File emmc_appsboot.mbn does not have SHA1 9e45e787a4b42613454a2de1460c392c6a3a0511");
-sha1_check("keymaster.mbn",     7378d705c82de8325d65c6e1526383bc0d4c3109) || \
-	abort("E3005: File keymaster.mbn does not have SHA1 7378d705c82de8325d65c6e1526383bc0d4c3109");
-sha1_check("NON-HLOS.bin",      8c280b4e098c1f19838ffae441972d616e018dd8) || \
-	abort("E3005: File NON-HLOS.bin does not have SHA1 8c280b4e098c1f19838ffae441972d616e018dd8");
-sha1_check("rpm.mbn",           8984071058db727b02052fbf3ad1a688e0bad262) || \
-	abort("E3005: File rpm.mbn does not have SHA1 8984071058db727b02052fbf3ad1a688e0bad262");
-sha1_check("sbl1.mbn",          3c9977779217ddcd98eca6d1a7760ae3c8da9ff7) || \
-	abort("E3005: File sbl1.mbn does not have SHA1 3c9977779217ddcd98eca6d1a7760ae3c8da9ff7");
-sha1_check("tz.mbn",            caf8208f5bb1ac1af181ce867e166a84f608dc89) || \
-	abort("E3005: File tz.mbn does not have SHA1 caf8208f5bb1ac1af181ce867e166a84f608dc89");
+sha1_check(package_extract_file("adspso.bin"),        8b1a57f7fabd18c8f6276f59c8b4d8cabda2e445) || abort("E3005: File adspso.bin does not have SHA1 8b1a57f7fabd18c8f6276f59c8b4d8cabda2e445");
+sha1_check(package_extract_file("cmnlib64.mbn"),      77f74c57b20be1a123a160ef3e0f33d752ca3fee) || abort("E3005: File cmnlib64.mbn does not have SHA1 77f74c57b20be1a123a160ef3e0f33d752ca3fee");
+sha1_check(package_extract_file("cmnlib.mbn"),        edf0aeb981affc8025ff653ab9620071b4fbcf05) || abort("E3005: File cmnlib.mbn does not have SHA1 edf0aeb981affc8025ff653ab9620071b4fbcf05");
+sha1_check(package_extract_file("devcfg.mbn"),        49276f059b7229976fd9152c9322772429d4eb00) || abort("E3005: File devcfg.mbn does not have SHA1 49276f059b7229976fd9152c9322772429d4eb00");
+sha1_check(package_extract_file("emmc_appsboot.mbn"), 9e45e787a4b42613454a2de1460c392c6a3a0511) || abort("E3005: File emmc_appsboot.mbn does not have SHA1 9e45e787a4b42613454a2de1460c392c6a3a0511");
+sha1_check(package_extract_file("keymaster.mbn"),     7378d705c82de8325d65c6e1526383bc0d4c3109) || abort("E3005: File keymaster.mbn does not have SHA1 7378d705c82de8325d65c6e1526383bc0d4c3109");
+sha1_check(package_extract_file("NON-HLOS.bin"),      8c280b4e098c1f19838ffae441972d616e018dd8) || abort("E3005: File NON-HLOS.bin does not have SHA1 8c280b4e098c1f19838ffae441972d616e018dd8");
+sha1_check(package_extract_file("rpm.mbn"),           8984071058db727b02052fbf3ad1a688e0bad262) || abort("E3005: File rpm.mbn does not have SHA1 8984071058db727b02052fbf3ad1a688e0bad262");
+sha1_check(package_extract_file("sbl1.mbn"),          3c9977779217ddcd98eca6d1a7760ae3c8da9ff7) || abort("E3005: File sbl1.mbn does not have SHA1 3c9977779217ddcd98eca6d1a7760ae3c8da9ff7");
+sha1_check(package_extract_file("tz.mbn"),            caf8208f5bb1ac1af181ce867e166a84f608dc89) || abort("E3005: File tz.mbn does not have SHA1 caf8208f5bb1ac1af181ce867e166a84f608dc89");
 
 set_progress(0.1);
 
