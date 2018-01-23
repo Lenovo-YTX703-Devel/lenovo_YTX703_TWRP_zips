@@ -17,8 +17,6 @@ sha1_check("cmnlib64.mbn",      77f74c57b20be1a123a160ef3e0f33d752ca3fee) || \
 	abort("E3005: File cmnlib64.mbn does not have SHA1 77f74c57b20be1a123a160ef3e0f33d752ca3fee");
 sha1_check("cmnlib.mbn",        edf0aeb981affc8025ff653ab9620071b4fbcf05) || \
 	abort("E3005: File cmnlib.mbn does not have SHA1 edf0aeb981affc8025ff653ab9620071b4fbcf05");
-sha1_check("countrycode.img",   6741a7ae240d6c1ca066dad4b1fcce884651132c) || \
-	abort("E3005: File countrycode.img does not have SHA1 6741a7ae240d6c1ca066dad4b1fcce884651132c");
 sha1_check("devcfg.mbn",        49276f059b7229976fd9152c9322772429d4eb00) || \
 	abort("E3005: File devcfg.mbn does not have SHA1 49276f059b7229976fd9152c9322772429d4eb00");
 sha1_check("emmc_appsboot.mbn", 9e45e787a4b42613454a2de1460c392c6a3a0511) || \
@@ -42,7 +40,6 @@ package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib6
 package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64bak");  set_progress(0.242);
 package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlib");       set_progress(0.289);
 package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlibbak");    set_progress(0.336);
-package_extract_file("countrycode.img",   "/dev/block/bootdevice/by-name/countrycode");  set_progress(0.384);
 package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfg");       set_progress(0.431);
 package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfgbak");    set_progress(0.478);
 package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/aboot");        set_progress(0.526);

@@ -12,7 +12,6 @@ ui_print(" ");
 sha1_check(package_extract_file("adspso.bin"),        7499a82db2f4d0c144bce15e7f610ea4e90fce6a) || abort("E3005: File adspso.bin does not have SHA1 7499a82db2f4d0c144bce15e7f610ea4e90fce6a");
 sha1_check(package_extract_file("cmnlib64.mbn"),      e4020489a7e3c37e53a2622f973173128344efe9) || abort("E3005: File cmnlib64.mbn does not have SHA1 e4020489a7e3c37e53a2622f973173128344efe9");
 sha1_check(package_extract_file("cmnlib.mbn"),        e77e9018e9a2df8d2094ba19bcb732b907f4610d) || abort("E3005: File cmnlib.mbn does not have SHA1 e77e9018e9a2df8d2094ba19bcb732b907f4610d");
-sha1_check(package_extract_file("countrycode.img"),   a612a323b387907ea92a015e26c3be72e27ba0b6) || abort("E3005: File countrycode.img does not have SHA1 a612a323b387907ea92a015e26c3be72e27ba0b6");
 sha1_check(package_extract_file("devcfg.mbn"),        ae29538a756388eba9ef4d5ee69ebcae84af91f9) || abort("E3005: File devcfg.mbn does not have SHA1 ae29538a756388eba9ef4d5ee69ebcae84af91f9");
 sha1_check(package_extract_file("emmc_appsboot.mbn"), e1daf62e9b1083a17ff689677a2ea30f84af37a9) || abort("E3005: File emmc_appsboot.mbn does not have SHA1 e1daf62e9b1083a17ff689677a2ea30f84af37a9");
 sha1_check(package_extract_file("keymaster.mbn"),     ddd9c352da5d85775ead6f895e6426ce59718580) || abort("E3005: File keymaster.mbn does not have SHA1 ddd9c352da5d85775ead6f895e6426ce59718580");
@@ -29,7 +28,6 @@ package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib6
 package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64bak");  set_progress(0.242);
 package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlib");       set_progress(0.289);
 package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlibbak");    set_progress(0.336);
-package_extract_file("countrycode.img",   "/dev/block/bootdevice/by-name/countrycode");  set_progress(0.384);
 package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfg");       set_progress(0.431);
 package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfgbak");    set_progress(0.478);
 package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/aboot");        set_progress(0.526);
