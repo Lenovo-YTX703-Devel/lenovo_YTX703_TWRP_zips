@@ -1,0 +1,49 @@
+###############################################################################
+# Updater script for S000963_171111_ROW firmware
+# Lenovo YT-X703L (Wi-Fi + LTE)
+###############################################################################
+getprop("ro.product.device") == "yt_x703l" || abort("E3004: This package is for \"YT-X703L\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+
+ui_print("Flashing stock firmware S000744_170824_ROW onto your YT-X703L.");
+set_progress(0.01);
+ui_print(" ");
+#
+# Perform the SHA1 checks
+sha1_check(package_extract_file("adspso.bin"),        ef11cf79fb87dd34fb14c6bffcecea6aa6b9b358) || abort("E3005: File adspso.bin does not have SHA1 ef11cf79fb87dd34fb14c6bffcecea6aa6b9b358");
+sha1_check(package_extract_file("cmnlib64.mbn"),      4c6b84fd6a76d6f9b0a69756e3db4fb37ae83192) || abort("E3005: File cmnlib64.mbn does not have SHA1 4c6b84fd6a76d6f9b0a69756e3db4fb37ae83192");
+sha1_check(package_extract_file("cmnlib.mbn"),        bfa9a314dc467caeba071322b67b54b7cab7c17f) || abort("E3005: File cmnlib.mbn does not have SHA1 bfa9a314dc467caeba071322b67b54b7cab7c17f");
+sha1_check(package_extract_file("devcfg.mbn"),        aea047ae3776d0970474fd04642519964030a32c) || abort("E3005: File devcfg.mbn does not have SHA1 aea047ae3776d0970474fd04642519964030a32c");
+sha1_check(package_extract_file("emmc_appsboot.mbn"), 6bc3d83a4c15d89806d7bcf1130d08ca01e4de78) || abort("E3005: File emmc_appsboot.mbn does not have SHA1 6bc3d83a4c15d89806d7bcf1130d08ca01e4de78");
+sha1_check(package_extract_file("keymaster.mbn"),     02cd3c60898eb66863d327d8c4282eff49171b28) || abort("E3005: File keymaster.mbn does not have SHA1 02cd3c60898eb66863d327d8c4282eff49171b28");
+sha1_check(package_extract_file("mdtp.img"),          6be82f101913a8b888c0fc940dc4bc9f7005621b) || abort("E3005: File mdtp.img does not have SHA1 6be82f101913a8b888c0fc940dc4bc9f7005621b");
+sha1_check(package_extract_file("NON-HLOS.bin"),      8f21c527c6e2daf14497e6e1369674d289397354) || abort("E3005: File NON-HLOS.bin does not have SHA1 8f21c527c6e2daf14497e6e1369674d289397354");
+sha1_check(package_extract_file("rpm.mbn"),           cc6ef3530c05da9b4067c6019c146d74ffdf7e32) || abort("E3005: File rpm.mbn does not have SHA1 cc6ef3530c05da9b4067c6019c146d74ffdf7e32");
+sha1_check(package_extract_file("sbl1.mbn"),          e96bb3b1339d85b7ed726c0b2bce60fe05f7b005) || abort("E3005: File sbl1.mbn does not have SHA1 e96bb3b1339d85b7ed726c0b2bce60fe05f7b005");
+sha1_check(package_extract_file("splash.img"),        9964b9d993dd91c07cd1573614841d518ee8cd12) || abort("E3005: File splash.img does not have SHA1 9964b9d993dd91c07cd1573614841d518ee8cd12");
+sha1_check(package_extract_file("tz.mbn"),            654c5fc58aa01da39694275218ee0b79c18097b1) || abort("E3005: File tz.mbn does not have SHA1 654c5fc58aa01da39694275218ee0b79c18097b1");
+
+set_progress(0.1);
+
+# Start applying the firmware images
+package_extract_file("adspso.bin",        "/dev/block/bootdevice/by-name/dsp");          set_progress(0.142);
+package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64");     set_progress(0.185);
+package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64bak");  set_progress(0.228);
+package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlib");       set_progress(0.271);
+package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlibbak");    set_progress(0.314);
+package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfg");       set_progress(0.357);
+package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfgbak");    set_progress(0.400);
+package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/aboot");        set_progress(0.442);
+package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/abootbak");     set_progress(0.485);
+package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymaster");    set_progress(0.528);
+package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymasterbak"); set_progress(0.571);
+package_extract_file("mdtp.img",          "/dev/block/bootdevice/by-name/mdtp");         set_progress(0.614);
+package_extract_file("NON-HLOS.bin",      "/dev/block/bootdevice/by-name/modem");        set_progress(0.657);
+package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpm");          set_progress(0.700);
+package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpmbak");       set_progress(0.742);
+package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1");         set_progress(0.828);
+package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1bak");      set_progress(0.871);
+package_extract_file("splash.img",        "/dev/block/bootdevice/by-name/splash");       set_progress(0.914);
+package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tz");           set_progress(0.957);
+package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tzbak");        set_progress(1.0);
+
+ui_print("Firmware restoration complete!");
