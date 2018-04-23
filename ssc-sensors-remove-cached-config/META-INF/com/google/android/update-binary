@@ -1,0 +1,68 @@
+#!/sbin/sh
+
+OUTFD=/proc/self/fd/$2;
+ZIP="$3";
+
+ui_print() {
+  until [ ! "$1" ]; do
+    echo -e "ui_print $1\nui_print" > $OUTFD;
+    shift
+  done
+}
+
+file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
+getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
+abort() { ui_print "$*"; umount /system;  exit 1; }
+
+ui_print "Checking device compatibility with YTX703F/L..."
+ro_product_device="$(getprop ro.product.device)"
+ro_build_product="$(getprop ro.build.product)"
+compatible_devices="yt_x703f yt_x703l"
+found=false
+for device in ${compatible_devices}; do
+    if [ "${ro_product_device}" == "${device}" -o "${ro_build_product}" == "${device}" ]; then
+        found=true
+        break
+    fi
+done
+if [ "${found}" = false ]; then
+    abort "Unsupported device ${ro_product_device}. Aborting..."
+fi
+
+ui_print '    m                                            '
+ui_print '    #       mmm   m mm    mmm   m   m   mmm      '
+ui_print '    #      #"  #  #"  #  #" "#  "m m"  #" "#     '
+ui_print '    #      #""""  #   #  #   #   #m#   #   #     '
+ui_print '    #mmmmm "#mm"  #   #  "#m#"    #    "#m#"     '
+ui_print '                                                 '
+case ${device} in
+"yt_x703f")
+ui_print 'm     mmmmmmmm m    m mmmmmm  mmmm   mmmm  mmmmmm'
+ui_print ' "m m"    #     #  #      #" m"  "m "   "# #     '
+ui_print '  "#"     #      ##      m"  #    #   mmm" #mmmmm'
+ui_print '   #      #     m""m    m"   #    #     "# #     '
+ui_print '   #      #    m"  "m  m"     #mm#  "mmm#" #     '
+ui_print '                                                 '
+;;
+"yt_x703l")
+ui_print 'm     mmmmmmmm m    m mmmmmm  mmmm   mmmm  m     '
+ui_print ' "m m"    #     #  #      #" m"  "m "   "# #     '
+ui_print '  "#"     #      ##      m"  #    #   mmm" #     '
+ui_print '   #      #     m""m    m"   #    #     "# #     '
+ui_print '   #      #    m"  "m  m"     #mm#  "mmm#" #mmmmm'
+ui_print '                                                 '
+;;
+*)
+abort "Unknown device ${device}"
+esac
+
+
+ui_print "Mounting persist partition..."
+mount -o rw /persist
+
+ui_print "Moving /persist/sensors/sns.reg to /persist/sensors/sns.reg.old"
+mv /persist/sensors/sns.reg /persist/sensors/sns.reg.old
+
+ui_print "Unmounting persist partition..."
+umount /persist
+
