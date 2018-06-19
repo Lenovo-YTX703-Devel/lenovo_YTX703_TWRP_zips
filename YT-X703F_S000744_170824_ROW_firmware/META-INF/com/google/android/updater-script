@@ -22,28 +22,29 @@ sha1_check(package_extract_file("sbl1.mbn"),          3abdc37aa422c95ace53badb02
 sha1_check(package_extract_file("splash.img"),        9964b9d993dd91c07cd1573614841d518ee8cd12) || abort("E3005: File splash.img does not have SHA1 9964b9d993dd91c07cd1573614841d518ee8cd12");
 sha1_check(package_extract_file("tz.mbn"),            65ecb9ea1d20108f5d65f4131fcd68ae519789a2) || abort("E3005: File tz.mbn does not have SHA1 65ecb9ea1d20108f5d65f4131fcd68ae519789a2");
 
-set_progress(0.1);
-
-# Start applying the firmware images
-package_extract_file("adspso.bin",        "/dev/block/bootdevice/by-name/dsp");          set_progress(0.142);
-package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64");     set_progress(0.185);
-package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64bak");  set_progress(0.228);
-package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlib");       set_progress(0.271);
-package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlibbak");    set_progress(0.314);
-package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfg");       set_progress(0.357);
-package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfgbak");    set_progress(0.400);
-package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/aboot");        set_progress(0.442);
-package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/abootbak");     set_progress(0.485);
-package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymaster");    set_progress(0.528);
-package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymasterbak"); set_progress(0.571);
-package_extract_file("mdtp.img",          "/dev/block/bootdevice/by-name/mdtp");         set_progress(0.614);
-package_extract_file("NON-HLOS.bin",      "/dev/block/bootdevice/by-name/modem");        set_progress(0.657);
-package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpm");          set_progress(0.700);
-package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpmbak");       set_progress(0.742);
-package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1");         set_progress(0.828);
-package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1bak");      set_progress(0.871);
-package_extract_file("splash.img",        "/dev/block/bootdevice/by-name/splash");       set_progress(0.914);
-package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tz");           set_progress(0.957);
-package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tzbak");        set_progress(1.0);
+ui_print("Applying the firmware images...");
+show_progress(0.3, 2);
+ui_print("* dsp");          assert(package_extract_file("adspso.bin",        "/dev/block/bootdevice/by-name/dsp"));
+ui_print("* cmnlib64");     assert(package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64"));
+ui_print("* cmnlib64bak");  assert(package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64bak"));
+ui_print("* cmnlib");       assert(package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlib"));
+ui_print("* cmnlibbak");    assert(package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlibbak"));
+ui_print("* devcfg");       assert(package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfg"));
+ui_print("* devcfgbak");    assert(package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfgbak"));
+ui_print("* aboot");        assert(package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/aboot"));
+ui_print("* abootbak");     assert(package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/abootbak"));
+ui_print("* keymaster");    assert(package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymaster"));
+ui_print("* keymasterbak"); assert(package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymasterbak"));
+ui_print("* mdtp");         assert(package_extract_file("mdtp.img",          "/dev/block/bootdevice/by-name/mdtp"));
+ui_print("* modem");        assert(package_extract_file("NON-HLOS.bin",      "/dev/block/bootdevice/by-name/modem"));
+ui_print("* rpm");          assert(package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpm"));
+ui_print("* rpmbak");       assert(package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpmbak"));
+ui_print("* sbl1");         assert(package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1"));
+ui_print("* sbl1bak");      assert(package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1bak"));
+ui_print("* splash");       assert(package_extract_file("splash.img",        "/dev/block/bootdevice/by-name/splash"));
+ui_print("* tz");           assert(package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tz"));
+ui_print("* tzbak");        assert(package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tzbak"));
 
 ui_print("Firmware restoration complete!");
+ui_print(" ");
+set_progress(1.000000);
