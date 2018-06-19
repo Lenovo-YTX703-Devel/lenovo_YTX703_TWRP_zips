@@ -1,0 +1,52 @@
+###############################################################################
+# Updater script for S000973_180524_ROW firmware
+# Lenovo YT-X703L (Wi-Fi + LTE)
+###############################################################################
+getprop("ro.product.device") == "yt_x703l" || abort("E3004: This package is for \"YT-X703L\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+
+ui_print("Flashing stock firmware S000973_180524_ROW onto your YT-X703L.");
+ui_print(" ");
+
+show_progress(0.7000, 5);
+
+ui_print("Performing the SHA1 checks...");
+sha1_check(package_extract_file("adspso.bin"),        486572fa97ad8ca3a589f0477411802f78bbdfc8) || abort("E3005: File adspso.bin does not have SHA1 486572fa97ad8ca3a589f0477411802f78bbdfc8");
+sha1_check(package_extract_file("cmnlib64.mbn"),      3010ef250f015ee1f647ed850f9e1830a5a25dab) || abort("E3005: File cmnlib64.mbn does not have SHA1 3010ef250f015ee1f647ed850f9e1830a5a25dab");
+sha1_check(package_extract_file("cmnlib.mbn"),        b4fc39c7e516efec19c87f16607fe2092cfcf220) || abort("E3005: File cmnlib.mbn does not have SHA1 b4fc39c7e516efec19c87f16607fe2092cfcf220");
+sha1_check(package_extract_file("devcfg.mbn"),        ae9f1886a6719ff6af14e0a8a07ca73eebfe96c4) || abort("E3005: File devcfg.mbn does not have SHA1 ae9f1886a6719ff6af14e0a8a07ca73eebfe96c4");
+sha1_check(package_extract_file("emmc_appsboot.mbn"), 9166ebd4b1f3dea9a28d4bd92e32c3415f44b972) || abort("E3005: File emmc_appsboot.mbn does not have SHA1 9166ebd4b1f3dea9a28d4bd92e32c3415f44b972");
+sha1_check(package_extract_file("keymaster.mbn"),     e705972367480d3b6a40ae7f2c98d7baea73ac47) || abort("E3005: File keymaster.mbn does not have SHA1 e705972367480d3b6a40ae7f2c98d7baea73ac47");
+sha1_check(package_extract_file("mdtp.img"),          dbfe56313b5ba1a3890810ded86c53b50b631bac) || abort("E3005: File mdtp.img does not have SHA1 dbfe56313b5ba1a3890810ded86c53b50b631bac");
+sha1_check(package_extract_file("NON-HLOS.bin"),      8de8c28ba711a348b8fa573d4ff739c5f6b1373e) || abort("E3005: File NON-HLOS.bin does not have SHA1 8de8c28ba711a348b8fa573d4ff739c5f6b1373e");
+sha1_check(package_extract_file("rpm.mbn"),           ae6948a35e30d2a74181451084df73d384af7819) || abort("E3005: File rpm.mbn does not have SHA1 ae6948a35e30d2a74181451084df73d384af7819");
+sha1_check(package_extract_file("sbl1.mbn"),          0ce2014c1cd77e3c472c1f026dd44eca067ad15b) || abort("E3005: File sbl1.mbn does not have SHA1 0ce2014c1cd77e3c472c1f026dd44eca067ad15b");
+sha1_check(package_extract_file("splash.img"),        158af4bed6f3260cee455a9380a5cfa92b861568) || abort("E3005: File splash.img does not have SHA1 158af4bed6f3260cee455a9380a5cfa92b861568");
+sha1_check(package_extract_file("tz.mbn"),            4ad6d36d068e9f3bd186d0bd5f64f4ebedc61945) || abort("E3005: File tz.mbn does not have SHA1 4ad6d36d068e9f3bd186d0bd5f64f4ebedc61945");
+
+ui_print("Applying the firmware images...");
+show_progress(0.3, 2);
+ui_print("* dsp");          assert(package_extract_file("adspso.bin",        "/dev/block/bootdevice/by-name/dsp"));
+ui_print("* cmnlib64");     assert(package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64"));
+ui_print("* cmnlib64bak");  assert(package_extract_file("cmnlib64.mbn",      "/dev/block/bootdevice/by-name/cmnlib64bak"));
+ui_print("* cmnlib");       assert(package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlib"));
+ui_print("* cmnlibbak");    assert(package_extract_file("cmnlib.mbn",        "/dev/block/bootdevice/by-name/cmnlibbak"));
+ui_print("* devcfg");       assert(package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfg"));
+ui_print("* devcfgbak");    assert(package_extract_file("devcfg.mbn",        "/dev/block/bootdevice/by-name/devcfgbak"));
+ui_print("* aboot");        assert(package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/aboot"));
+ui_print("* abootbak");     assert(package_extract_file("emmc_appsboot.mbn", "/dev/block/bootdevice/by-name/abootbak"));
+ui_print("* keymaster");    assert(package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymaster"));
+ui_print("* keymasterbak"); assert(package_extract_file("keymaster.mbn",     "/dev/block/bootdevice/by-name/keymasterbak"));
+ui_print("* mdtp");         assert(package_extract_file("mdtp.img",          "/dev/block/bootdevice/by-name/mdtp"));
+ui_print("* modem");        assert(package_extract_file("NON-HLOS.bin",      "/dev/block/bootdevice/by-name/modem"));
+ui_print("* rpm");          assert(package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpm"));
+ui_print("* rpmbak");       assert(package_extract_file("rpm.mbn",           "/dev/block/bootdevice/by-name/rpmbak"));
+ui_print("* sbl1");         assert(package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1"));
+ui_print("* sbl1bak");      assert(package_extract_file("sbl1.mbn",          "/dev/block/bootdevice/by-name/sbl1bak"));
+ui_print("* splash");       assert(package_extract_file("splash.img",        "/dev/block/bootdevice/by-name/splash"));
+ui_print("* tz");           assert(package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tz"));
+ui_print("* tzbak");        assert(package_extract_file("tz.mbn",            "/dev/block/bootdevice/by-name/tzbak"));
+
+ui_print("Firmware restoration complete!");
+ui_print(" ");
+set_progress(1.000000);
+
