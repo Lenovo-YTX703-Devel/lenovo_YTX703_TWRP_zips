@@ -1,0 +1,40 @@
+Signature-Version: 1.0
+SHA1-Digest-Manifest: PpCUBF2FV7I0fNKlb7t17BwlZcA=
+Created-By: 1.0 (Android SignApk)
+
+Name: META-INF/com/google/android/updater-script
+SHA1-Digest-Manifest: Hye9TY4zZEoMozhsjnOgjU+V08E=
+
+Name: system/etc/dolby/dax-default.xml
+SHA1-Digest-Manifest: DDf6qtBTqHHiXaLLqHPKG42+ytU=
+
+Name: system/addon.d/59-dolby.sh
+SHA1-Digest-Manifest: vqkyA3ZJTgmpaJi0C8tEHTNBaxM=
+
+Name: system/lib/libhwdaphal.so
+SHA1-Digest-Manifest: Z01qyKr6pxio8CnG2at1ViXqZiU=
+
+Name: META-INF/com/android/otacert
+SHA1-Digest-Manifest: QW7yPFUPbhU0tUYKW4i2EdneCnw=
+
+Name: META-INF/com/google/android/update-binary
+SHA1-Digest-Manifest: F+iz7oG0Z1/WoFXPUco9UlG7uVM=
+
+Name: system/priv-app/AxUI/AxUI.apk
+SHA1-Digest-Manifest: zJ58VDs/YhDa6LgnnvokDf5hb5c=
+
+Name: system/lib64/libhwdaphal.so
+SHA1-Digest-Manifest: Xja9mVEBMdi+BKfrZieIl5xqlVc=
+
+Name: system/lib/libstagefright_soft_ddpdec.so
+SHA1-Digest-Manifest: Avp+B9lAm9wkHGFH+oYTpNd8y0A=
+
+Name: system/priv-app/Ax/Ax.apk
+SHA1-Digest-Manifest: ci9Ue3ycbnG9a/pkdn97Jl6WUnA=
+
+Name: system/lib/soundfx/libswdax.so
+SHA1-Digest-Manifest: IB6LJaFOGFHG6KhtheYT1MwURrg=
+
+Name: system/lib/libdlbdapstorage.so
+SHA1-Digest-Manifest: JibsTXrmNB09YjUxGezc561f3AA=
+
