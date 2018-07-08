@@ -36,13 +36,11 @@ ui_print "-----------------------------------";
 ui_print "                                   ";
 
 ui_print "Checking device....................";
-device1="yt_x703f";
-device2="yt_x703l";
-if ! [ "$(getprop ro.product.device)" == "$device1" -o "$(getprop ro.build.product)" == "$device1" / 
-    -o "$(getprop ro.product.device)" == "$device2" -o "$(getprop ro.build.product)" == "$device2" ]
-then
+
+compat_list="yt_x703f YTX703F yt_x703l YTX703L"
+if ! echo "${compat_list}" | grep "$(getprop ro.product.device)"; then
   abort "Unsupported device. Aborting........";
-fi;
+fi
 
 ui_print "Mounting system....................";
 mount -o rw /system;
