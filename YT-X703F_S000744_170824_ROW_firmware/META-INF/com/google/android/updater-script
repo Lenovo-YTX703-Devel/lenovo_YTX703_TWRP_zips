@@ -1,10 +1,10 @@
 ###############################################################################
-# Updater script for S000963_171111_ROW firmware
-# Lenovo YT-X703L (Wi-Fi + LTE)
+# Updater script for S000744_170824_ROW firmware
+# Lenovo YT-X703F (Wi-Fi)
 ###############################################################################
-getprop("ro.product.device") == "yt_x703f" || getprop("ro.product.device") == "YTX703F" || abort("E3004: This package is for \"YT-X703L\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+getprop("ro.product.device") == "yt_x703f" || getprop("ro.product.device") == "YTX703F" || abort("E3004: This package is for \"YT-X703F\" devices; this is a \"" + getprop("ro.product.device") + "\".");
 
-ui_print("Flashing stock firmware S000744_170824_ROW onto your YT-X703L.");
+ui_print("Flashing stock firmware S000744_170824_ROW onto your YT-X703F.");
 set_progress(0.01);
 ui_print(" ");
 #
