@@ -1,0 +1,87 @@
+#!/bin/bash
+
+set -e -u -o pipefail
+
+sgdisk="sgdisk"
+
+# Transform the partition table of an existing disk image
+# into calls to gpt_create_partition() that can be used as
+# basis for a script.
+# For interactive use via:
+#   $ source gpt-common
+#   $ gpt_make_template disk.img
+#
+gpt_make_template() {
+	local disk_img_src="$1"
+	local size_bytes=$(stat --printf="%s" ${disk_img_src})
+	local disk_guid=$(${sgdisk} --print ${disk_img_src} | awk '/Disk identifier/ { print $4; }')
+	local i=1
+
+	printf "#!/bin/bash\n\n"
+	printf "source gpt-common\n\n"
+	printf "gpt_start %s %s %s\n" tmp_disk.img ${disk_guid} ${size_bytes}
+	while :; do
+		local info="$(${sgdisk} --info=${i} ${disk_img_src} 2> /dev/null)"
+		if grep "Partition #${i} does not exist." <(echo "${info}") > /dev/null; then
+			break;
+		fi
+		local guid_code=$(awk '/Partition GUID code:/ { print $4; }' <(echo "${info}"))
+		local unique_guid=$(awk '/Partition unique GUID:/ { print $4; }' <(echo "${info}"))
+		local sector_start=$(awk '/First sector:/ { print $3; }' <(echo "${info}"))
+		local sector_end=$(awk '/Last sector:/ { print $3; }' <(echo "${info}"))
+		local attributes=$(awk '/Attribute flags:/ { print $3; }' <(echo "${info}"))
+		local label=$(awk '/Partition name:/ { print $3; }' <(echo "${info}"))
+		printf "gpt_create_partition  %-18s  %9s  %9s  %s  %s  %s\n" ${label} ${sector_start} ${sector_end} ${guid_code} ${unique_guid} ${attributes}
+		i=$((${i} + 1))
+	done
+	printf "gpt_retrieve %s\n" gpt_out.bin
+	printf "gpt_end\n"
+}
+
+# Set a bunch of global variables for future invocations
+# of gpt_create_partition().
+gpt_start() {
+	disk_img_tmp="$1"
+	disk_guid="$2"
+	size_bytes="$3"
+
+	truncate --size=0 ${disk_img_tmp}
+	truncate --size=${size_bytes} ${disk_img_tmp}
+
+	current_partition_index=1
+	sgdisk_cmd="--set-alignment=1 --disk-guid=${disk_guid}"
+}
+
+# Maintains state via the ${current_partition_index} variable.
+gpt_create_partition() {
+	local label="$1"
+	local sector_start="$2"
+	local sector_end="$3"
+	local guid_code="$4"
+	local unique_guid="$5"
+	local attributes="$6"
+
+	sgdisk_cmd="${sgdisk_cmd} --new=${current_partition_index}:${sector_start}:${sector_end}"
+	sgdisk_cmd="${sgdisk_cmd} --change-name=${current_partition_index}:${label}"
+	sgdisk_cmd="${sgdisk_cmd} --typecode=${current_partition_index}:${guid_code}"
+	sgdisk_cmd="${sgdisk_cmd} --partition-guid=${current_partition_index}:${unique_guid}"
+	sgdisk_cmd="${sgdisk_cmd} --attributes=${current_partition_index}:=:${attributes}"
+	current_partition_index=$((${current_partition_index} + 1))
+}
+
+gpt_retrieve() {
+	local gpt_img_out="$1"
+	local size_sectors=$(($(stat --printf="%s" ${disk_img_tmp}) / 512)) # Size of tmp disk image
+
+	# Apply constructed sgdisk command (via gpt_create_partition calls)
+	# to the temporary disk image.
+	${sgdisk} ${sgdisk_cmd} ${disk_img_tmp}
+	# Retrieve the Protective MBR (1 sector), Primary GPT (33 sectors) and Backup GPT (33 sectors)
+	# of the disk image into a fastboot-compatible gpt_both0.bin format.
+	rm -rf ${gpt_img_out}
+	cat <(dd if=${disk_img_tmp} bs=512 count=34) <(dd if=${disk_img_tmp} bs=512 count=33 skip=$((${size_sectors} - 33))) > ${gpt_img_out}
+}
+
+gpt_end() {
+	rm -f ${disk_img_tmp}
+}
