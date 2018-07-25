@@ -70,7 +70,7 @@ gpt-treble-32gb.bin)
 esac
 
 ui_print "Unpacking..."
-unzip -o -d /tmp ${zip} -x "META-INF/*" || abort "unzip returned $?"
+unzip -o -d /tmp ${zip} -x "META-INF/*" -x "tools/*" || abort "unzip returned $?"
 if ! sha256sum /tmp/${gpt} | grep -qsw ${checksum}; then
 	abort "sha256sum for ${gpt} is incorrect (expected ${checksum}, have $(sha256sum ${gpt}))! Exiting..."
 fi
