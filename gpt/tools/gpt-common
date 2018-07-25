@@ -34,7 +34,7 @@ gpt_make_template() {
 		printf "gpt_create_partition  %-18s  %9s  %9s  %s  %s  %s\n" ${label} ${sector_start} ${sector_end} ${guid_code} ${unique_guid} ${attributes}
 		i=$((${i} + 1))
 	done
-	printf "gpt_retrieve %s\n" gpt_out.bin
+	printf "gpt_retrieve --format=twrp %s\n" gpt_out.bin
 	printf "gpt_end\n"
 	printf "sgdisk --print %s\n" gpt_out.bin
 }
