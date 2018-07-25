@@ -83,10 +83,10 @@ for partition in /dev/block/mmcblk0p*; do
 	done
 done
 
-ui_print "Flashing stock GPT partition table..."
+ui_print "Flashing the new GPT partition table..."
 sgdisk --load-backup=/tmp/${gpt} /dev/block/mmcblk0 || abort "sgdisk --load-backup returned $?"
 
-ui_print "Reloading new partition table..."
+ui_print "Reloading the partitions..."
 partprobe /dev/block/mmcblk0 || abort "partprobe returned $?"
 sleep 3 # XXX: Revisit this. The mount commands below fail otherwise.
 
