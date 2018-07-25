@@ -36,6 +36,7 @@ gpt_make_template() {
 	done
 	printf "gpt_retrieve %s\n" gpt_out.bin
 	printf "gpt_end\n"
+	printf "sgdisk --print %s\n" gpt_out.bin
 }
 
 # Set a bunch of global variables for future invocations
@@ -70,16 +71,50 @@ gpt_create_partition() {
 }
 
 gpt_retrieve() {
-	local gpt_img_out="$1"
+	local format="$1"
+	local gpt_img_out="$2"
 	local size_sectors=$(($(stat --printf="%s" ${disk_img_tmp}) / 512)) # Size of tmp disk image
 
 	# Apply constructed sgdisk command (via gpt_create_partition calls)
 	# to the temporary disk image.
 	${sgdisk} ${sgdisk_cmd} ${disk_img_tmp}
-	# Retrieve the Protective MBR (1 sector), Primary GPT (33 sectors) and Backup GPT (33 sectors)
-	# of the disk image into a fastboot-compatible gpt_both0.bin format.
-	rm -rf ${gpt_img_out}
-	cat <(dd if=${disk_img_tmp} bs=512 count=34) <(dd if=${disk_img_tmp} bs=512 count=33 skip=$((${size_sectors} - 33))) > ${gpt_img_out}
+
+	case ${format} in
+	--format=twrp)
+		# Retrieve just:
+		# * the MBR (1 sector)
+		# * the Primary GPT header (1 sector)
+		# * the Primary GPT partition table (32 sectors)
+		# * the Backup GPT header (1 sector)
+		# The gptfdisk program considers the Backup GPT partition table
+		# to be completely identical to the primary one and
+		# will reconstruct it based on that.
+		${sgdisk} --backup=${gpt_img_out} ${disk_img_tmp}
+		;;
+	--format=fastboot)
+		# Retrieve:
+		# * the Protective MBR (1 sector)
+		# * Primary GPT header and partition table (33 sectors)
+		# * Backup GPT header and partition table (33 sectors)
+		# of the disk image into a fastboot-compatible
+		# format that can be used as follows:
+		#
+		#   $ fastboot flashing unlock_critical
+		#
+		# Bootloader will launch recovery with the --wipe-data parameter
+		#
+		#   $ fastboot flash partition gpt_both0.bin
+		#
+		# Bootloader will wipe ALL data from the eMMC. Meaning that
+		# if you don't reflash your critical bootloader partitions again
+		# before rebooting, you can say goodbye to your device once
+		# and for all. You've been warned.
+		cat <(dd if=${disk_img_tmp} bs=512 count=34) <(dd if=${disk_img_tmp} bs=512 count=33 skip=$((${size_sectors} - 33))) > ${gpt_img_out}
+		;;
+	*)
+		echo "Usage: gpt_retrieve --format=twrp|fastboot gpt_img_out.bin"
+		exit 1
+	esac
 }
 
 gpt_end() {
