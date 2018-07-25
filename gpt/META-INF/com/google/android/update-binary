@@ -1,0 +1,117 @@
+#!/sbin/sh
+
+set -e -u -o pipefail
+
+outfd=/proc/self/fd/$2
+zip="$3"
+
+ui_print() {
+	while [ $# -ne 0 ]; do
+		echo -e "ui_print $1\nui_print" > ${outfd}
+		shift
+	done
+}
+
+file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
+getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
+abort() { ui_print "$*"; umount /system; exit 1; }
+
+compatible_zip_names="gpt-stock gpt-treble"
+base_name=$(basename ${zip} .zip)
+if ! echo ${compatible_zip_names} | grep -qsw ${base_name}; then
+	abort "Invalid zip name ${base_name}. Please name it as one of: ${compatible_zip_names} -- for specific functionality."
+fi
+
+# Deliberately only allow compatibility with the new Oreo TWRP
+ui_print "Checking device compatibility with YTX703F or YTX703L..."
+compatible_devices="YTX703F YTX703L"
+device=$(getprop ro.product.device)
+if ! echo ${compatible_devices} | grep -qsw ${device}; then
+	abort "Unsupported device ${device}. Aborting..."
+fi
+ui_print "Identified compatible device ${device}."
+
+size_sectors=$(blockdev --getsz /dev/block/mmcblk0)
+case ${size_sectors} in
+61071360)
+	ui_print "Identified compatible 32GB eMMC."
+	gpt="${base_name}-32gb.bin"
+	;;
+*)
+	ui_print "Device does not appear to be 32GB model (eMMC size is ${size_sectors} sectors)."
+	ui_print "Refusing to apply incompatible partition table."
+	ui_print "If you think this is in error, send me this output:"
+	sgdisk --print /dev/block/mmcblk0 |
+	while read line; do
+		ui_print "${line}"
+	done
+	dd if=/dev/block/mmcblk0 of=/tmp/gpt_primary.bin bs=512 count=34
+	dd if=/dev/block/mmcblk0 of=/tmp/gpt_backup.bin bs=512 count=33 skip=$((${size_sectors} - 33))
+	cat /tmp/gpt_primary.bin /tmp/gpt_backup.bin > /tmp/gpt_of_this_${device}_device.bin
+	rm -f /tmp/gpt_primary.bin /tmp/gpt_backup.bin
+
+	ui_print "Also send me the file located at /tmp/gpt_of_this_${device}_device.bin (adb pull)"
+	abort "eMMC is incompatible with the GPT partition table packaged in this zip. Don't try to force-flash it."
+	;;
+esac
+
+ui_print "Selected GPT file ${gpt} based on zip file name."
+
+case ${gpt} in
+gpt-stock-32gb.bin)
+	checksum="c3db2e3cff9dde86df79b5edb703571cdca376735fb74da0d767e75fe5038410"
+	;;
+gpt-treble-32gb.bin)
+	checksum="d613b48d489bd47a246060681f30c34ecfd9e99d34a5b587f70ceb245cd1882d"
+	;;
+*)
+	abort "I don't have file ${gpt}."
+	;;
+esac
+
+ui_print "Unpacking..."
+unzip -o -d /tmp ${zip} -x "META-INF/*" -x "tools/*" || abort "unzip returned $?"
+if ! sha256sum /tmp/${gpt} | grep -qsw ${checksum}; then
+	abort "sha256sum for ${gpt} is incorrect (expected ${checksum}, have $(sha256sum ${gpt}))! Exiting..."
+fi
+
+ui_print "Unmounting all partitions..."
+for partition in /dev/block/mmcblk0p*; do
+	while grep -qsw ${partition} /proc/mounts; do
+		umount ${partition}
+		sync
+	done
+done
+
+ui_print "Flashing the new GPT partition table..."
+sgdisk --load-backup=/tmp/${gpt} /dev/block/mmcblk0 || abort "sgdisk --load-backup returned $?"
+
+ui_print "Reloading the partitions..."
+partprobe /dev/block/mmcblk0 || abort "partprobe returned $?"
+sleep 3 # XXX: Revisit this. The mount commands below fail otherwise.
+
+# The following error is printed from bootable/recovery-twrp/partitionmanager.cpp:
+#    recv error on uevent
+# Still need to understand why, and if it's normal, considering what we just did.
+
+ui_print "Mounting back cache and data partitions..."
+# Need to bypass /etc/fstab and specify block devices manually,
+# since this may be a different partition table than what's in the fstab file.
+mount $(realpath /dev/block/bootdevice/by-name/cache) /cache || ui_print "Mounting cache returned $?. Not failing."
+mount $(realpath /dev/block/bootdevice/by-name/userdata) /data || ui_print "Mounting data returned $?. Not failing."
+
+ui_print "Repartitioning completed."
+ui_print "===================================================================="
+ui_print " WARNING: I cannot guarantee what is on your partitions now, after  "
+ui_print " the repartitioning has taken place. Partitions that were resized,  "
+ui_print " created and/or moved are now probably corrupted and will require   "
+ui_print " a full reformatting (at least system and vendor).                  "
+ui_print " CRITICAL: If any bootloader-related partition just got corrupted,  "
+ui_print " then if you reboot the device now, it'll become a hard brick.      "
+ui_print "                                                                    "
+ui_print "      So please flash again a firmware zip for your device NOW!     "
+ui_print "             DO NOT reboot the device until you do!                 "
+ui_print "                                                                    "
+ui_print "                        YOU'VE BEEN WARNED                          "
+ui_print "===================================================================="
+
